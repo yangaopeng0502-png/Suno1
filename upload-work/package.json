@@ -1,0 +1,8 @@
+{
+  "name": "suno-music-english-trainer",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "echo \"Open index.html or deploy as a static site.\""
+  }
+}

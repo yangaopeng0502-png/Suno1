@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suno 音乐英文训练器</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Suno Music English Trainer</p>
+          <h1>Suno 音乐英文训练器</h1>
+          <p>
+            王子要穿过音乐城堡救出公主。每个单词怪都会喊出一个 Suno 音乐英文，答对就攻击，答错会掉生命。
+          </p>
+        </div>
+        <div class="stage-visual" aria-hidden="true">
+          <svg viewBox="0 0 360 220" role="img">
+            <defs>
+              <linearGradient id="stageGlow" x1="0" x2="1" y1="0" y2="1">
+                <stop offset="0%" stop-color="#ffcb57" />
+                <stop offset="58%" stop-color="#39c3b4" />
+                <stop offset="100%" stop-color="#4452ff" />
+              </linearGradient>
+            </defs>
+            <rect x="16" y="20" width="328" height="170" rx="18" fill="#151923" />
+            <path d="M30 176 C86 126, 126 140, 180 88 S282 42, 330 92" fill="none" stroke="url(#stageGlow)" stroke-width="10" stroke-linecap="round" />
+            <circle cx="92" cy="128" r="30" fill="#ffcb57" />
+            <circle cx="248" cy="82" r="24" fill="#39c3b4" />
+            <rect x="122" y="88" width="114" height="72" rx="12" fill="#f8f3e7" />
+            <path d="M150 116 h58 M150 136 h38" stroke="#151923" stroke-width="8" stroke-linecap="round" />
+            <path d="M276 116 v40 c0 14 -12 24 -28 24 -14 0 -25 -8 -25 -19 0 -12 12 -20 28 -20 5 0 10 1 14 3 V78 h11 z" fill="#f8f3e7" />
+            <path d="M78 58 v48 c0 12 -10 22 -24 22 -13 0 -23 -7 -23 -18 0 -10 10 -18 24 -18 5 0 9 1 13 3 V58 h10 z" fill="#f8f3e7" />
+          </svg>
+        </div>
+      </section>
+
+      <section class="progress-panel" aria-label="学习进度">
+        <div>
+          <span class="label">今日能量</span>
+          <strong id="score">0</strong>
+        </div>
+        <div>
+          <span class="label">生命值</span>
+          <strong id="lives">5</strong>
+        </div>
+        <div>
+          <span class="label">连击</span>
+          <strong id="combo">0</strong>
+        </div>
+        <div>
+          <span class="label">已掌握词汇</span>
+          <strong id="learnedCount">0</strong>
+        </div>
+        <div>
+          <span class="label">当前等级</span>
+          <strong id="levelName">Level 1 结构</strong>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <article class="panel adventure-card">
+          <div class="panel-title">
+            <span>王子救公主：单词怪闯关</span>
+            <div class="title-actions">
+              <button id="toggleListening" type="button">听力模式</button>
+              <button id="speakMonster" type="button">朗读怪物</button>
+              <button id="restartAdventure" type="button">重新开始</button>
+            </div>
+          </div>
+          <div class="chapter-map" id="chapterMap" aria-label="章节地图"></div>
+          <div class="adventure-scene">
+            <div class="hero-character" aria-label="王子">
+              <div class="avatar prince-avatar" aria-hidden="true">
+                <span class="crown"></span>
+                <span class="head"></span>
+                <span class="hair"></span>
+                <span class="eye left-eye"></span>
+                <span class="eye right-eye"></span>
+                <span class="smile"></span>
+                <span class="cape"></span>
+              </div>
+              <strong>王子</strong>
+              <small id="heroStatus">准备出发</small>
+            </div>
+            <div class="road">
+              <div class="level-badge" id="battleStage">第 1 关</div>
+              <span id="roadStep"></span>
+            </div>
+            <div class="monster-card" aria-label="单词怪">
+              <span class="monster-label">单词怪</span>
+              <strong id="monsterTerm">chorus</strong>
+              <p id="monsterHint">听它喊出英文，再选择正确意思。</p>
+              <p class="answer-reveal" id="answerReveal"></p>
+              <div class="monster-hp">
+                <span id="monsterHpBar"></span>
+              </div>
+            </div>
+            <div class="princess-card" aria-label="公主">
+              <div class="avatar princess-avatar" aria-hidden="true">
+                <span class="crown"></span>
+                <span class="head"></span>
+                <span class="hair"></span>
+                <span class="eye left-eye"></span>
+                <span class="eye right-eye"></span>
+                <span class="smile"></span>
+                <span class="dress"></span>
+              </div>
+              <strong>公主</strong>
+              <small id="princessStatus">还在城堡里等待</small>
+            </div>
+          </div>
+          <div class="battle-options" id="battleOptions"></div>
+          <div class="battle-log" id="battleLog"></div>
+          <div class="prompt-quest" id="promptQuest">
+            <div>
+              <span>提示词任务关</span>
+              <strong id="questTitle"></strong>
+              <p id="questText"></p>
+              <ol class="quest-steps">
+                <li>先看任务要求：它会告诉你这次要做什么类型的 Suno 歌。</li>
+                <li>点“1 自动填入工坊”：系统会把要求填到下面的 Suno 提示词工坊。</li>
+                <li>点“2 检查并解锁”：如果英文提示词包含关键要素，就解锁继续战斗。</li>
+              </ol>
+            </div>
+            <div class="quest-actions">
+              <button id="applyQuest" type="button">1 自动填入工坊</button>
+              <button id="checkQuest" type="button">2 检查并解锁</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel word-card">
+          <div class="panel-title">
+            <span>词卡训练</span>
+            <div class="title-actions">
+              <button id="speakWord" type="button">朗读</button>
+              <button id="nextWord" type="button">换一个词</button>
+            </div>
+          </div>
+          <p class="term" id="term">chorus</p>
+          <p class="translation" id="translation">副歌</p>
+          <p class="explanation" id="explanation"></p>
+          <div class="example-box">
+            <span>可用于 Suno</span>
+            <code id="example"></code>
+          </div>
+          <button class="primary-action" id="markLearned" type="button">我记住了</button>
+        </article>
+
+        <article class="panel suno-simulator">
+          <div class="panel-title">
+            <span>Suno 模拟工作台</span>
+            <div class="title-actions">
+              <button id="nextSunoStep" type="button">下一步</button>
+            </div>
+          </div>
+          <div class="simulator-layout">
+            <aside class="sim-sidebar" id="simSidebar"></aside>
+            <section class="sim-screen">
+              <div class="sim-topbar">
+                <strong id="simPageTitle">Create</strong>
+                <span id="simModeLabel">Simple Mode</span>
+              </div>
+              <div class="sim-create-grid">
+                <div class="sim-field hero-field">
+                  <span>Prompt</span>
+                  <p id="simPrompt">A warm pop song about finding courage, with a catchy chorus.</p>
+                </div>
+                <div class="sim-field">
+                  <span>Lyrics</span>
+                  <p>[Verse] ... [Chorus] ... [Bridge] ...</p>
+                </div>
+                <div class="sim-field">
+                  <span>Style</span>
+                  <p>pop, warm female vocals, piano, mid-tempo</p>
+                </div>
+                <div class="sim-field">
+                  <span>Controls</span>
+                  <p>Instrumental / Upload Audio / Voice / Create</p>
+                </div>
+              </div>
+              <div class="sim-explain">
+                <strong id="simTerm">Prompt</strong>
+                <p id="simMeaning"></p>
+                <code id="simExample"></code>
+              </div>
+            </section>
+          </div>
+          <div class="sim-flow" id="simFlow"></div>
+        </article>
+
+        <article class="panel song-flow-trainer">
+          <div class="panel-title">
+            <span>Suno 制作流程训练</span>
+            <div class="title-actions">
+              <button id="nextFlowTask" type="button">换一个任务</button>
+              <button id="checkFlowTask" type="button">检查流程</button>
+            </div>
+          </div>
+          <div class="flow-task">
+            <span>当前制作任务</span>
+            <strong id="flowTaskTitle"></strong>
+            <p id="flowTaskText"></p>
+          </div>
+          <div class="flow-board" id="flowBoard"></div>
+          <p class="flow-feedback" id="flowFeedback"></p>
+        </article>
+
+        <article class="panel quiz-card">
+          <div class="panel-title">
+            <span>英文闯关</span>
+            <div class="title-actions">
+              <button id="reviewMistakes" type="button">错题练习</button>
+              <button id="nextQuiz" type="button">下一题</button>
+            </div>
+          </div>
+          <p class="quiz-question" id="quizQuestion"></p>
+          <div class="answers" id="answers"></div>
+          <p class="feedback" id="feedback"></p>
+        </article>
+
+        <article class="panel prompt-builder">
+          <div class="panel-title">
+            <span>Prompt 拼装器</span>
+            <button id="resetPrompt" type="button">重置</button>
+          </div>
+          <div class="builder-grid" id="builderGrid"></div>
+          <div class="prompt-output">
+            <span>生成英文</span>
+            <p id="promptText"></p>
+          </div>
+        </article>
+
+        <article class="panel theory-map">
+          <div class="panel-title">
+            <span>乐理地图</span>
+            <div class="title-actions">
+              <button id="applyLessonPrompt" type="button">套用到提示词</button>
+              <button id="nextLesson" type="button">继续</button>
+            </div>
+          </div>
+          <div class="lesson-track" id="lessonTrack"></div>
+          <h2 id="lessonTitle"></h2>
+          <p id="lessonText"></p>
+          <ul id="lessonWords"></ul>
+        </article>
+
+        <article class="panel lyrics-trainer">
+          <div class="panel-title">
+            <span>模拟歌词编辑器</span>
+            <div class="title-actions">
+              <button id="lyricsTemplate" type="button">套用结构</button>
+              <button id="checkLyrics" type="button">检查歌词</button>
+            </div>
+          </div>
+          <div class="lyrics-layout">
+            <div class="lyrics-editor">
+              <span>Lyrics</span>
+              <textarea id="lyricsInput" spellcheck="false"></textarea>
+            </div>
+            <div class="lyrics-guide">
+              <span>段落结构</span>
+              <div id="lyricsChecklist"></div>
+              <p id="lyricsFeedback"></p>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel suno-workshop">
+          <div class="panel-title">
+            <span>Suno 提示词工坊</span>
+            <div class="title-actions">
+              <button id="copyPrompt" type="button">复制英文</button>
+              <button id="resetWorkshop" type="button">清空</button>
+            </div>
+          </div>
+          <div class="workshop-intro">
+            先选“你要什么歌”，再把节奏、旋律、音色、结构和制作感叠上去。越具体，Suno 越容易靠近你脑子里的声音。
+          </div>
+          <div class="prompt-formula" id="promptFormula"></div>
+          <div class="workshop-grid" id="workshopGrid"></div>
+          <div class="final-prompt">
+            <span>可直接放进 Suno 的英文提示词</span>
+            <p id="finalPrompt"></p>
+          </div>
+          <div class="prompt-notes">
+            <div>
+              <span>中文拆解</span>
+              <p id="promptChinese"></p>
+            </div>
+            <div>
+              <span>当前重点</span>
+              <p id="promptFocus"></p>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
+
+    <script src="script.js"></script>
+  </body>
+</html>

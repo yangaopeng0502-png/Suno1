@@ -1,0 +1,13 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[user]
+	name = Codex
+	email = codex@example.com
+[remote "origin"]
+	url = https://github.com/yangaopeng0502-png/Suno1.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
